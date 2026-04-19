@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            width: 350px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #1d4ed8;
+        }
+
+        p {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .message {
+            text-align: center;
+            color: red;
+            margin-bottom: 10px;
+        }
+
+        .logout {
+            text-align: center;
+            color: green;
+            margin-bottom: 10px;
+        }
+
+        .admin-btn {
+            margin-top: 15px;
+            background-color: #16a34a;
+        }
+
+        .admin-btn:hover {
+            background-color: #15803d;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Login</h1>
+
+    <div th:if="${param.error}" class="message">
+        Invalid username or password
+    </div>
+
+    <div th:if="${param.logout}" class="logout">
+        You have been logged out
+    </div>
+
+    <form th:action="@{/login}" method="post">
+        <div>
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Enter username">
+        </div>
+
+        <div>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter password">
+        </div>
+
+        <button type="submit">Login</button>
+    </form>
+
+    <button type="button" class="admin-btn" onclick="fillAdmin()">Login as Admin</button>
+
+    <p>
+        Don't have an account?
+        <a th:href="@{/register}">Register here</a>
+    </p>
+</div>
+
+<script>
+    function fillAdmin() {
+        document.getElementById("username").value = "admin";
+        document.getElementById("password").value = "admin123";
+    }
+</script>
+</body>
+</html>

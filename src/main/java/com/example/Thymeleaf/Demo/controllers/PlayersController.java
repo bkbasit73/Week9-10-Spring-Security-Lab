@@ -6,18 +6,23 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class PlayersController {
 
     private final PlayerService playerService;
+    private final PasswordEncoder passwordEncoder;
 
-    public PlayersController(PlayerService playerService) {
+    public PlayersController(PlayerService playerService, PasswordEncoder passwordEncoder) {
         this.playerService = playerService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/players")
@@ -59,9 +64,17 @@ public class PlayersController {
         return "Players";
     }
 
-    @GetMapping("/players/create")
-    public String showCreatePlayerForm(Model model) {
+    @GetMapping("/register")
+    public String showRegisterForm(Model model) {
         model.addAttribute("player", new Player());
-        return "CreatePlayer";
+        return "register";
+    }
+
+    @PostMapping("/register")
+    public String registerPlayer(@ModelAttribute Player player) {
+        player.setPassword(passwordEncoder.encode(player.getPassword()));
+        player.setRole("PLAYER");
+        playerService.addPlayer(player);
+        return "redirect:/login";
     }
 }
